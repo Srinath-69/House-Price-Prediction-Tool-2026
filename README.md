@@ -1,6 +1,6 @@
 ***
 
-# **House Price Prediction Web App**
+# **House Price Prediction Tool 2026**
 
 A Flask-based web application for house price prediction with user authentication, model training, and prediction history tracking.[1]
 
