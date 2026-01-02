@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - House Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="register-bg">
+    <div class="container" style="max-width:400px;margin-top:60px;">
+        <h2>Register</h2>
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('register') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" name="confirm_password" id="confirm_password" required>
+            </div>
+            <button class="button" type="submit">Register</button>
+        </form>
+        <p style="margin-top:15px;">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+    </div>
+        <footer>
+        <b style="color: black;">&copy; 2026 House Price Prediction Tool</b>
+    </footer>
+</body>
+</html>

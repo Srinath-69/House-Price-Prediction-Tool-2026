@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registered Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container" style="max-width:600px;margin-top:40px;">
+        <h2>Registered Users</h2>
+        <table style="width:100%;border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th style="border-bottom:1px solid #ccc;text-align:left;padding:8px;">ID</th>
+                    <th style="border-bottom:1px solid #ccc;text-align:left;padding:8px;">Username</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td style="padding:8px;">{{ user.id }}</td>
+                    <td style="padding:8px;">{{ user.username }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('home') }}" class="button" style="margin-top:20px;display:inline-block;">Back to Home</a>
+    </div>
+</body>
+</html>

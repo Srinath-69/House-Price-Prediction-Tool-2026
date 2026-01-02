@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<!-- Logout Confirmation Modal -->
+<div id="logoutModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h2 style="margin-bottom: 10px; color: #d9534f;">Logout Confirmation</h2>
+    <p style="margin-bottom: 24px;">Are you sure you want to do logout?</p>
+    <div style="display:flex; gap:18px; justify-content:center;">
+      <button id="confirmLogout" class="modal-btn modal-btn-confirm">Confirm</button>
+      <button id="cancelLogout" class="modal-btn modal-btn-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+<body>
+    <div class="container">
+        <header>
+            <h1>House Price Prediction 2025</h1>
+            <p>Predict House Prices Using Linear Regression</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="stats-section">
+                <h2>Dataset Statistics</h2>
+                {% if stats %}
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Sample Size</h3>
+                        <p>{{ stats.count }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Average Price</h3>
+                        <p>{{ stats.avg_price }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Min Price</h3>
+                        <p>{{ stats.min_price }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Max Price</h3>
+                        <p>{{ stats.max_price }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Average Area</h3>
+                        <p>{{ stats.avg_area }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Average Bedrooms</h3>
+                        <p>{{ stats.avg_bedrooms }}</p>
+                    </div>
+                </div>
+                {% else %}
+                <p>No dataset statistics available. Generate the dataset first.</p>
+                {% endif %}
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button id="retrain-button" class="button">Retrain Model</button>
+                    <a href="{{ url_for('history') }}" class="button" style="text-decoration: none;">View Prediction History</a>
+                </div>
+                <div id="training-results" class="hidden">
+                    <p>Model retrained successfully!</p>
+                    <p>MSE: <span id="mse-value"></span></p>
+                    <p>R² Score: <span id="r2-value"></span></p>
+                </div>
+            </div>
+            
+            <div class="prediction-section">
+                <h2>Predict House Price</h2>
+                
+                {% if error %}
+                <div class="error-message">
+                    <p>Error: {{ error }}</p>
+                </div>
+                {% endif %}
+                
+                {% if prediction %}
+                <div class="prediction-result">
+                    <h3>Predicted House Price</h3>
+                    <p class="price">{{ prediction }}</p>
+                </div>
+                {% endif %}
+                
+                <form action="/predict" method="post">
+                    <div class="form-group">
+                        <label for="area">Area (sq ft):</label>
+                        <input type="number" id="area" name="area" min="500" max="5000" step="10" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bedrooms">Bedrooms:</label>
+                        <input type="number" id="bedrooms" name="bedrooms" min="1" max="10" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bathrooms">Bathrooms:</label>
+                        <input type="number" id="bathrooms" name="bathrooms" min="1" max="5" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="age">Age (years):</label>
+                        <input type="number" id="age" name="age" min="0" max="100" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="garage">Garage Spaces:</label>
+                        <input type="number" id="garage" name="garage" min="0" max="5" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="yard_size">Yard Size (sq ft):</label>
+                        <input type="number" id="yard_size" name="yard_size" min="0" max="5000" step="10" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="distance_to_city">Distance to City (miles):</label>
+                        <input type="number" id="distance_to_city" name="distance_to_city" min="0" max="20" step="0.1" required>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="button">Predict Price</button>
+                        {% if session['username'] %}
+                            <a href="#" id="logoutBtn" class="button" style="align-self: center; text-decoration: none;">Logout</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <footer>
+            <b>&copy; 2026 House Price Prediction Tool</b>
+        </footer>
+    </div>
+    
+    <script>
+        document.getElementById('retrain-button').addEventListener('click', function() {
+            this.textContent = 'Retraining...';
+            this.disabled = true;
+            
+            fetch('/retrain')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('retrain-button').textContent = 'Retrain Model';
+                    document.getElementById('retrain-button').disabled = false;
+                    
+                    if (data.success) {
+                        document.getElementById('training-results').classList.remove('hidden');
+                        document.getElementById('mse-value').textContent = data.mse.toFixed(2);
+                        document.getElementById('r2-value').textContent = data.r2.toFixed(2);
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('retrain-button').textContent = 'Retrain Model';
+                    document.getElementById('retrain-button').disabled = false;
+                    alert('Error: ' + error);
+                });
+        });
+    </script>
+<script>
+document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('logoutModal').style.display = 'flex';
+});
+document.getElementById('cancelLogout').onclick = function() {
+    document.getElementById('logoutModal').style.display = 'none';
+};
+document.getElementById('confirmLogout').onclick = function() {
+    window.location.href = "{{ url_for('logout') }}";
+};
+</script>
+</body>
+</html>

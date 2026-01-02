@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="history-bg">
+    <div class="container" style="max-width:700px;margin-top:40px;">
+        <div class="history-box">
+            <h2>Your Prediction History</h2>
+            {% if history %}
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th style="border-bottom:1px solid #ccc;text-align:left;padding:8px 48px 8px 8px;min-width:220px;">Date & Time</th>
+                        <th style="border-bottom:1px solid #ccc;text-align:left;padding:8px;">Predicted Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in history %}
+                    <tr>
+                        <td style="padding:8px 48px 8px 8px;min-width:450px;">{{ h.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td style="padding:8px;">₹{{ '{:,.2f}'.format(h.predicted_price) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No predictions yet.</p>
+            {% endif %}
+            <a href="{{ url_for('index') }}" class="button" style="margin-top:20px;display:inline-block;">Back to Home</a>
+        </div>
+        {% if session.last_inputs %}
+        <div style="display: flex; justify-content: flex-end;">
+            <div class="history-box-2" style="margin-bottom:20px; min-width:350px;">
+                <h3>Last Prediction Inputs</h3>
+                <ul style="list-style:none;padding:0;">
+                    <li><b>Area:</b> {{ session.last_inputs.area }}</li>
+                    <li><b>Bedrooms:</b> {{ session.last_inputs.bedrooms }}</li>
+                    <li><b>Bathrooms:</b> {{ session.last_inputs.bathrooms }}</li>
+                    <li><b>Age:</b> {{ session.last_inputs.age }}</li>
+                    <li><b>Garage:</b> {{ session.last_inputs.garage }}</li>
+                    <li><b>Yard Size:</b> {{ session.last_inputs.yard_size }}</li>
+                    <li><b>Distance to City:</b> {{ session.last_inputs.distance_to_city }}</li>
+                    <li><b>Predicted Price:</b> ₹{{ '{:,.2f}'.format(session.last_inputs.predicted_price) }}</li>
+                    <li><b>Date & Time:</b> {{ session.last_inputs.timestamp }}</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+            <footer>
+            <b>&copy; 2026 House Price Prediction Tool</b>
+        </footer>
+</body>
+</html>

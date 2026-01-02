@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>House Price Prediction - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+        .main-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2a7ae2; /* Unique blue color */
+        }
+        .main-desc {
+            font-size: 1.0rem;
+            margin-bottom: 2rem;
+            color: #000000;
+            text-align: left;
+            max-width: 600px;
+        }
+        .nav-header {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px 40px 0 40px;
+        }
+        .main-content-flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            gap: 20px;
+        }
+        .main-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="home-bg">
+    <div class="nav-header-box">
+        <div style="margin-right:auto;">
+            <a class="buttonh" style="text-decoration:none; font-size:2rem; font-weight:bold;">House Price Prediction 2025</a>
+        </div>
+        <a href="{{ url_for('login') }}" class="buttonh" style="text-decoration:none;">Login</a>
+        <a href="{{ url_for('register') }}" class="buttonh" style="text-decoration:none;">Register</a>
+        <a class="buttonh" style="text-decoration:none;">About Us</a>
+    </div>
+    <div class="center-content">
+        <div class="main-content-box">
+            <div class="main-content-flex">
+                <div class="main-text">
+                    <div class="main-title">Predictabilty of House Prices...</div>
+                    <div class="main-desc">
+                    Welcome to the House Price Prediction tool! Easily estimate the value of a house using modern machine learning techniques. Register or login to start predicting and tracking your results. Unlock the power of data-driven insights with our advanced machine learning-based tool designed to accurately estimate house values. Whether you're a buyer, seller, or real estate enthusiast, our platform makes it simple to predict property prices with just a few clicks.
+                    <br>
+                    <br>
+                    <b>"Start making smarter real estate decisions today with House Price Predictions — where technology meets property value."</b>
+                    </div>
+                </div>
+                <img src="{{ url_for('static', filename='images/content.jpg') }}" alt="House" class="main-image">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
